@@ -11,15 +11,21 @@ interface ContainerProps {
 }
 const Container: React.FC<ContainerProps> = ({ word }) => {
   const [UsedLetters, setUsedLetters] = useState<string>('');
-  console.log(UsedLetters);
+  const [Errors, setErrors] = useState<number>(0);
   return (
     <div className="containerDiv">
       <h1 className="containerTitle">Wisielec</h1>
 
       {Array.from(word).map((e: string, i: number) => (
-        <Letters key={i} letter={e} />
+        <Letters key={i} letter={e} usedLetters={UsedLetters} />
       ))}
-      <Input onClickHandler={setUsedLetters} usedLetters={UsedLetters}></Input>
+      <Input
+        onClickHandler={setUsedLetters}
+        usedLetters={UsedLetters}
+        word={word}
+        setErrors={setErrors}
+        errors={Errors}
+      ></Input>
       <ShowUsedLetters letters={UsedLetters} />
     </div>
   );
