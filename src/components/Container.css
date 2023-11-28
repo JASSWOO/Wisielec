@@ -1,10 +1,16 @@
-.containerTitle{
-    font-size: 50px;
-    color: white;
+.containerTitle {
+  font-size: 50px;
+  color: white;
 }
-.containerDiv{
-    width: 80rem;
-    height: 40rem;
-    margin: 100px,0,0,100px;
-    background-color: rgb(124, 122, 122);
+.containerDiv {
+  width: 80rem;
+  height: 40rem;
+  margin: 100px, 0, 0, 100px;
+  background-color: rgb(124, 122, 122);
+}
+.letters {
+  width: fit-content;
+  height: 50px;
+  margin: auto;
+  text-align: center;
 }

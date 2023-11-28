@@ -24,7 +24,7 @@ const Input: React.FC<InputProps> = ({ onClickHandler, usedLetters, word, setErr
   return (
     <>
       <input type="text" maxLength={1} onChange={(e) => setLetter(e.target.value)}></input>
-      <button onClick={() => doesContain()}></button>
+      <button onClick={() => doesContain()}>Wprowadz</button>
     </>
   );
 };
