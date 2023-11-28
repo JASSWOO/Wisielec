@@ -6,6 +6,8 @@ import Input from './input/Input';
 import { useState } from 'react';
 import ShowUsedLetters from './usedWords/ShowUsedLetters';
 import ShowMistakes from './showMistakes/ShowMistakes';
+import Popup from './popup/Popup';
+import Reset from './reset/Reset';
 
 interface ContainerProps {}
 
@@ -14,8 +16,13 @@ const Container: React.FC<ContainerProps> = () => {
   const [UsedLetters, setUsedLetters] = useState<string>('');
   const [Errors, setErrors] = useState<number>(0);
   const [word, setWord] = useState<string>('');
+
+  let message: string = '';
   const checkWin = (word: string, usedLetters: string): boolean => {
     let win: boolean = true;
+    if (usedLetters == '') {
+      return false;
+    }
     Array.from(word).forEach((c) => {
       if (!usedLetters.includes(c)) {
         win = false;
@@ -28,16 +35,17 @@ const Container: React.FC<ContainerProps> = () => {
     setErrors(0);
     setWord(words[Math.floor(Math.random() * words.length)]);
     console.log(word);
+    message = '';
   };
-
-  if (checkWin(word, UsedLetters) == true) {
-    window.alert('Wygrałeś!');
-    newGame();
-  } else if (Errors == 5) {
-    window.alert('Przegrałeś');
+  if (word == '') {
     newGame();
   }
 
+  if (checkWin(word, UsedLetters) == true) {
+    message = 'wygrales';
+  } else if (Errors == 5) {
+    message = 'przegrales';
+  }
   return (
     <div className="containerDiv">
       <h1 className="containerTitle">Wisielec</h1>
@@ -47,15 +55,19 @@ const Container: React.FC<ContainerProps> = () => {
         ))}
       </div>
 
-      <Input
-        onClickHandler={setUsedLetters}
-        usedLetters={UsedLetters}
-        word={word}
-        setErrors={setErrors}
-        errors={Errors}
-      ></Input>
+      {message != 'wygrales' && message != 'przegrales' && (
+        <Input
+          onClickHandler={setUsedLetters}
+          usedLetters={UsedLetters}
+          word={word}
+          setErrors={setErrors}
+          errors={Errors}
+        ></Input>
+      )}
       <ShowUsedLetters letters={UsedLetters} />
       <ShowMistakes mistakes={Errors} />
+      <Reset newGame={newGame}></Reset>
+      <Popup message={message}></Popup>
     </div>
   );
 };
