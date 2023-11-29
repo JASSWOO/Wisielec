@@ -1,8 +1,7 @@
 .lettersDiv {
   float: left;
-  width: 15px;
-  height: 15px;
+  letter-spacing: 15px;
   color: white;
   vertical-align: middle;
-  font-size: px;
+  font-size: 40px;
 }

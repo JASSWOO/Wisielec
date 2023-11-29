@@ -21,9 +21,8 @@
   width: 30%;
   margin-right: 10%;
   height: 400px;
-  background-color: lightgray;
+  background-color: rgb(84, 83, 83);
 }
-
 .letters {
   width: fit-content;
   height: 50px;

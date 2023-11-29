@@ -18,6 +18,7 @@ const Container: React.FC<ContainerProps> = () => {
   const [word, setWord] = useState<string>('');
 
   let message: string = '';
+
   const checkWin = (word: string, usedLetters: string): boolean => {
     let win: boolean = true;
     if (usedLetters == '') {
@@ -34,7 +35,6 @@ const Container: React.FC<ContainerProps> = () => {
     setUsedLetters('');
     setErrors(0);
     setWord(words[Math.floor(Math.random() * words.length)]);
-    console.log(word);
     message = '';
   };
   if (word == '') {
@@ -58,7 +58,7 @@ const Container: React.FC<ContainerProps> = () => {
 
         {message != 'wygrales' && message != 'przegrales' && (
           <Input
-            onClickHandler={setUsedLetters}
+            setUsedLetters={setUsedLetters}
             usedLetters={UsedLetters}
             word={word}
             setErrors={setErrors}
@@ -66,8 +66,9 @@ const Container: React.FC<ContainerProps> = () => {
           ></Input>
         )}
         {UsedLetters.length != 0 && <ShowUsedLetters letters={UsedLetters} />}
-        <ShowMistakes mistakes={Errors} />
+
         <Reset newGame={newGame} />
+        <ShowMistakes mistakes={Errors} />
         <Popup message={message} />
       </div>
       <div className="pictureDiv"></div>
