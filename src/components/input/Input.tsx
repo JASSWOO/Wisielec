@@ -22,10 +22,10 @@ const Input: React.FC<InputProps> = ({ onClickHandler, usedLetters, word, setErr
     }
   };
   return (
-    <>
+    <div className="inputDiv">
       <input type="text" maxLength={1} onChange={(e) => setLetter(e.target.value)}></input>
       <button onClick={() => doesContain()}>Wprowadz</button>
-    </>
+    </div>
   );
 };
 

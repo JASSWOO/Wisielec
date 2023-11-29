@@ -49,25 +49,28 @@ const Container: React.FC<ContainerProps> = () => {
   return (
     <div className="containerDiv">
       <h1 className="containerTitle">Wisielec</h1>
-      <div className="letters">
-        {Array.from(word).map((e: string, i: number) => (
-          <Letters key={i} letter={e} usedLetters={UsedLetters} />
-        ))}
-      </div>
+      <div className="gameDiv">
+        <div className="letters">
+          {Array.from(word).map((e: string, i: number) => (
+            <Letters key={i} letter={e} usedLetters={UsedLetters} />
+          ))}
+        </div>
 
-      {message != 'wygrales' && message != 'przegrales' && (
-        <Input
-          onClickHandler={setUsedLetters}
-          usedLetters={UsedLetters}
-          word={word}
-          setErrors={setErrors}
-          errors={Errors}
-        ></Input>
-      )}
-      <ShowUsedLetters letters={UsedLetters} />
-      <ShowMistakes mistakes={Errors} />
-      <Reset newGame={newGame}></Reset>
-      <Popup message={message}></Popup>
+        {message != 'wygrales' && message != 'przegrales' && (
+          <Input
+            onClickHandler={setUsedLetters}
+            usedLetters={UsedLetters}
+            word={word}
+            setErrors={setErrors}
+            errors={Errors}
+          ></Input>
+        )}
+        {UsedLetters.length != 0 && <ShowUsedLetters letters={UsedLetters} />}
+        <ShowMistakes mistakes={Errors} />
+        <Reset newGame={newGame} />
+        <Popup message={message} />
+      </div>
+      <div className="pictureDiv"></div>
     </div>
   );
 };
