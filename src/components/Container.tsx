@@ -1,5 +1,5 @@
 import './Container.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Letters from './letters/Letters';
 import Input from './input/Input';
 
@@ -13,62 +13,51 @@ interface ContainerProps {}
 
 const Container: React.FC<ContainerProps> = () => {
   const words: string[] = ['kask', 'slowo'];
-  const [UsedLetters, setUsedLetters] = useState<string>('');
-  const [Errors, setErrors] = useState<number>(0);
+  const [usedLetters, setUsedLetters] = useState<string>('');
+  const [errors, setErrors] = useState<number>(0);
   const [word, setWord] = useState<string>('');
+  const [win, setWin] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>('');
 
-  let message: string = '';
-
-  const checkWin = (word: string, usedLetters: string): boolean => {
-    let win: boolean = true;
-    if (usedLetters == '') {
-      return false;
-    }
-    Array.from(word).forEach((c) => {
-      if (!usedLetters.includes(c)) {
-        win = false;
-      }
-    });
-    return win;
-  };
   const newGame = () => {
     setUsedLetters('');
     setErrors(0);
     setWord(words[Math.floor(Math.random() * words.length)]);
-    message = '';
+    setWin(false);
+    setMessage('');
   };
-  if (word == '') {
-    newGame();
-  }
+  useEffect(() => {
+    if (win) {
+      setMessage('przegrales');
+    } else if (errors == 5) {
+      setMessage('wygrales');
+    }
+  });
 
-  if (checkWin(word, UsedLetters) == true) {
-    message = 'wygrales';
-  } else if (Errors == 5) {
-    message = 'przegrales';
-  }
   return (
     <div className="containerDiv">
       <h1 className="containerTitle">Wisielec</h1>
       <div className="gameDiv">
         <div className="letters">
           {Array.from(word).map((e: string, i: number) => (
-            <Letters key={i} letter={e} usedLetters={UsedLetters} />
+            <Letters key={i} letter={e} usedLetters={usedLetters} />
           ))}
         </div>
 
-        {message != 'wygrales' && message != 'przegrales' && (
+        {win && (
           <Input
+            setWin={setWin}
             setUsedLetters={setUsedLetters}
-            usedLetters={UsedLetters}
+            usedLetters={usedLetters}
             word={word}
             setErrors={setErrors}
-            errors={Errors}
+            errors={errors}
           ></Input>
         )}
-        {UsedLetters.length != 0 && <ShowUsedLetters letters={UsedLetters} />}
+        {usedLetters.length != 0 && <ShowUsedLetters letters={usedLetters} />}
 
         <Reset newGame={newGame} />
-        <ShowMistakes mistakes={Errors} />
+        <ShowMistakes mistakes={errors} />
         <Popup message={message} />
       </div>
       <div className="pictureDiv"></div>

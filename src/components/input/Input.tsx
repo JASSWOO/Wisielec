@@ -5,37 +5,36 @@ import './Input.css';
 interface InputProps {
   setUsedLetters: (letter: string) => void;
   setErrors: (setErrors: number) => void;
+  setWin: (seWin: boolean) => void;
   usedLetters: string;
   word: string;
   errors: number;
 }
 
-const Input: React.FC<InputProps> = ({ setUsedLetters, usedLetters, word, setErrors, errors }) => {
-  const [letter, setLetter] = useState<string>('');
+const Input: React.FC<InputProps> = ({ setUsedLetters, usedLetters, word, setErrors, errors, setWin }) => {
+  const [inputString, setInputString] = useState<string>('');
   const doesContain = () => {
-    if (letter.length > 1) {
-      if (word == letter) {
-        setUsedLetters(usedLetters + letter);
+    if (inputString.length == 1) {
+      if (word.includes(inputString)) {
+        setUsedLetters(usedLetters + inputString);
       } else {
         setErrors(errors + 1);
       }
-    } else if (letter.length == 1) {
-      if (!usedLetters.includes(letter)) {
-        setUsedLetters(usedLetters + letter);
-        if (!word.includes(letter)) {
-          setErrors(errors + 1);
-        }
+    } else if (inputString.length > 1) {
+      if (word === inputString) {
+        setUsedLetters('');
+        setWin(true);
       }
     }
   };
   window.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && errors < 5) {
       doesContain();
     }
   });
   return (
     <div className="inputDiv">
-      <input autoFocus type="text" onChange={(e) => setLetter(e.target.value)}></input>
+      <input autoFocus type="text" onChange={(e) => setInputString(e.target.value)}></input>
       <div className="buttonStyle">
         <button onClick={() => doesContain()}>Wprowadz</button>
       </div>
