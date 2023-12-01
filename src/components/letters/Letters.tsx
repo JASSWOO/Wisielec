@@ -7,7 +7,7 @@ interface LettersProps {
 
 const Letters: React.FC<LettersProps> = ({ letter, usedLetters }) => {
   const ifLetterUsed = () => {
-    if (usedLetters?.includes(letter)) {
+    if (usedLetters.includes(letter)) {
       return letter;
     } else {
       return '_';

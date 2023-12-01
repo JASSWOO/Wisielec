@@ -1,5 +1,5 @@
 import './Container.css';
-import React, { useEffect } from 'react';
+import React from 'react';
 import Letters from './letters/Letters';
 import Input from './input/Input';
 
@@ -16,23 +16,9 @@ const Container: React.FC<ContainerProps> = () => {
   const [usedLetters, setUsedLetters] = useState<string>('');
   const [errors, setErrors] = useState<number>(0);
   const [word, setWord] = useState<string>('');
-  const [win, setWin] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
 
-  const newGame = () => {
-    setUsedLetters('');
-    setErrors(0);
-    setWord(words[Math.floor(Math.random() * words.length)]);
-    setWin(false);
-    setMessage('');
-  };
-  useEffect(() => {
-    if (win) {
-      setMessage('przegrales');
-    } else if (errors == 5) {
-      setMessage('wygrales');
-    }
-  });
+  //console.log('used: ', usedLetters, ' errors: ', errors, ' word: ', word, ' message: ', message);
 
   return (
     <div className="containerDiv">
@@ -44,20 +30,27 @@ const Container: React.FC<ContainerProps> = () => {
           ))}
         </div>
 
-        {win && (
+        {word != '' && (
           <Input
-            setWin={setWin}
             setUsedLetters={setUsedLetters}
-            usedLetters={usedLetters}
-            word={word}
             setErrors={setErrors}
+            setMessage={setMessage}
+            word={word}
+            usedLetters={usedLetters}
             errors={errors}
+            message={message}
           ></Input>
         )}
-        {usedLetters.length != 0 && <ShowUsedLetters letters={usedLetters} />}
+        {usedLetters.length != 0 || (message == '' && <ShowUsedLetters letters={usedLetters} />)}
 
-        <Reset newGame={newGame} />
-        <ShowMistakes mistakes={errors} />
+        <Reset
+          words={words}
+          setWord={setWord}
+          setErrors={setErrors}
+          setMessage={setMessage}
+          setUsedLetters={setUsedLetters}
+        />
+        {word != '' && <ShowMistakes mistakes={errors} />}
         <Popup message={message} />
       </div>
       <div className="pictureDiv"></div>
