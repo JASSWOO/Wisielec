@@ -12,48 +12,60 @@ interface InputProps {
   message: string;
 }
 
-const Input: React.FC<InputProps> = ({ setUsedLetters, word, setMessage, usedLetters, setErrors, errors, message }) => {
+const Input: React.FC<InputProps> = ({ setUsedLetters, setMessage, usedLetters, setErrors, errors, message }) => {
   const [inputString, setInputString] = useState<string>('');
   const [btnEnabled, setBtnEnabled] = useState<boolean>(true);
-  const Check = (): boolean => {
-    let check: boolean = true;
-    Array.from(word).forEach((e) => {
-      if (!(usedLetters + inputString).includes(e)) {
-        check = false;
-      }
-    });
-    return check;
-  };
-  console.log('input: ', inputString, ' word: ', word, ' message: ', message, ' usedLetters: ', usedLetters);
-  if (message != '') {
+
+  //console.log('input: ', inputString, ' word: ', word, ' message: ', message, ' usedLetters: ', usedLetters);
+  if (message != '' && btnEnabled != true) {
     setBtnEnabled(true);
   }
 
+  // const fillUsedLetters = (): void => {
+  //   Array.from(inputString).forEach((e) => {
+  //     if (!usedLetters.includes(e)) {
+  //       setUsedLetters(usedLetters + e);
+  //     }
+  //   });
+  // };
+
+  // const onClickHandler = () => {
+  //   if (!usedLetters.includes(inputString))
+  //     if (inputString.length == 1) {
+  //       setUsedLetters(usedLetters + inputString);
+  //       if (word.includes(inputString)) {
+  //         if (Check()) {
+  //           setMessage('wygrales');
+  //         }
+  //       } else {
+  //         setErrors(errors + 1);
+  //       }
+  //       if (errors + 1 == 5) {
+  //         setMessage('przegrales');
+  //       }
+  //     } else if (inputString.length > 1) {
+  //       if (Check()) {
+  //         setMessage('wygrales');
+  //         setUsedLetters(usedLetters + inputString);
+  //       } else {
+  //         setErrors(errors + 1);
+  //         if (errors + 1 == 5) {
+  //           setMessage('przegrales');
+  //         }
+  //       }
+  //     }
+  // };
+
   const onClickHandler = () => {
-    if (!usedLetters.includes(inputString))
-      if (inputString.length == 1) {
-        setUsedLetters(usedLetters + inputString);
-        if (word.includes(inputString)) {
-          if (Check()) {
-            setMessage('wygrales');
-          }
-        } else {
-          setErrors(errors + 1);
-        }
-        if (errors + 1 == 5) {
+    if (!usedLetters.includes(inputString)) {
+      setUsedLetters(usedLetters + inputString);
+      if (!(usedLetters + inputString).includes(inputString)) {
+        setErrors(errors + 1);
+        if (errors + 1) {
           setMessage('przegrales');
         }
-      } else if (inputString.length > 1) {
-        if (Check()) {
-          setMessage('wygrales');
-          setUsedLetters(usedLetters + inputString);
-        } else {
-          setErrors(errors + 1);
-          if (errors + 1 == 5) {
-            setMessage('przegrales');
-          }
-        }
       }
+    }
   };
 
   window.addEventListener('keypress', (e) => {
@@ -64,9 +76,9 @@ const Input: React.FC<InputProps> = ({ setUsedLetters, word, setMessage, usedLet
 
   return (
     <div className="inputDiv">
-      <input autoFocus type="text" onChange={(e) => setInputString(e.target.value)}></input>
+      <input autoFocus type="text" maxLength={1} onChange={(e) => setInputString(e.target.value)}></input>
       <div className="buttonStyle">
-        <button disabled={btnEnabled} onClick={onClickHandler}>
+        <button disabled={!btnEnabled} onClick={onClickHandler}>
           Wprowadz
         </button>
       </div>
