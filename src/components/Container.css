@@ -23,6 +23,10 @@
   height: 400px;
   background-color: rgb(84, 83, 83);
 }
+.pictureDiv img {
+  width: 100%;
+  height: 100%;
+}
 .letters {
   width: fit-content;
   height: 50px;

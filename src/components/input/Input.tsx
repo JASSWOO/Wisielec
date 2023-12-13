@@ -1,85 +1,65 @@
 import { useState } from 'react';
 import './Input.css';
-// import ButtonStyle1 from '../buttonStyle1/ButtonStyle1';
 
 interface InputProps {
-  setUsedLetters: (SetUsedLetters: string) => void;
-  setMessage: (setMessage: string) => void;
-  setErrors: (setErrors: number) => void;
-  usedLetters: string;
-  word: string;
+  usedLetters: string[];
+  setUsedLetters: React.Dispatch<React.SetStateAction<string[]>>;
+  setErrors: React.Dispatch<React.SetStateAction<number>>;
+  setCorrectedLetters: React.Dispatch<React.SetStateAction<string[]>>;
   errors: number;
-  message: string;
+  word: string | null;
+  //win: boolean;
 }
 
-const Input: React.FC<InputProps> = ({ setUsedLetters, setMessage, usedLetters, setErrors, errors, message }) => {
+const Input: React.FC<InputProps> = ({
+  setUsedLetters,
+  setCorrectedLetters,
+  setErrors,
+  errors,
+  usedLetters,
+  word,
+  //win,
+}) => {
   const [inputString, setInputString] = useState<string>('');
-  const [btnEnabled, setBtnEnabled] = useState<boolean>(true);
-
-  //console.log('input: ', inputString, ' word: ', word, ' message: ', message, ' usedLetters: ', usedLetters);
-  if (message != '' && btnEnabled != true) {
-    setBtnEnabled(true);
-  }
-
-  // const fillUsedLetters = (): void => {
-  //   Array.from(inputString).forEach((e) => {
-  //     if (!usedLetters.includes(e)) {
-  //       setUsedLetters(usedLetters + e);
-  //     }
-  //   });
-  // };
-
-  // const onClickHandler = () => {
-  //   if (!usedLetters.includes(inputString))
-  //     if (inputString.length == 1) {
-  //       setUsedLetters(usedLetters + inputString);
-  //       if (word.includes(inputString)) {
-  //         if (Check()) {
-  //           setMessage('wygrales');
-  //         }
-  //       } else {
-  //         setErrors(errors + 1);
-  //       }
-  //       if (errors + 1 == 5) {
-  //         setMessage('przegrales');
-  //       }
-  //     } else if (inputString.length > 1) {
-  //       if (Check()) {
-  //         setMessage('wygrales');
-  //         setUsedLetters(usedLetters + inputString);
-  //       } else {
-  //         setErrors(errors + 1);
-  //         if (errors + 1 == 5) {
-  //           setMessage('przegrales');
-  //         }
-  //       }
-  //     }
-  // };
 
   const onClickHandler = () => {
-    if (!usedLetters.includes(inputString)) {
-      setUsedLetters(usedLetters + inputString);
-      if (!(usedLetters + inputString).includes(inputString)) {
-        setErrors(errors + 1);
-        if (errors + 1) {
-          setMessage('przegrales');
+    if (inputString.length === 1) {
+      if (!usedLetters.includes(inputString)) {
+        if (word && word.includes(inputString)) {
+          setCorrectedLetters((correctedLetters) => [...correctedLetters, ...inputString]);
+          setUsedLetters((usedLetters) => [...usedLetters, ...inputString]);
+          setInputString('');
+        } else if (word && !word.includes(inputString)) {
+          setUsedLetters((usedLetters) => [...usedLetters, ...inputString]);
+          setErrors((errors) => errors + 1);
+          setInputString('');
         }
+      } else {
+        setUsedLetters((usedLetters) => [...usedLetters, ...inputString]);
+        setErrors((errors) => errors + 1);
+        setInputString('');
+      }
+    } else if (inputString.length > 1) {
+      if (inputString === word) {
+        setCorrectedLetters((correctedLetters) => [...correctedLetters, ...inputString]);
+        setUsedLetters((usedLetters) => [...usedLetters, ...inputString]);
+        setInputString('');
+      } else {
+        setErrors((errors) => errors + 1);
       }
     }
   };
-
-  window.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter' && message == '') {
-      onClickHandler();
-    }
-  });
-
   return (
     <div className="inputDiv">
-      <input autoFocus type="text" maxLength={1} onChange={(e) => setInputString(e.target.value)}></input>
+      <input
+        disabled={errors >= 5}
+        autoFocus
+        value={inputString}
+        onChange={(evt) => setInputString(evt.target.value)}
+      />
       <div className="buttonStyle">
-        <button disabled={!btnEnabled} onClick={onClickHandler}>
-          Wprowadz
+        <button disabled={errors >= 5} onClick={onClickHandler}>
+          Wprowadź
         </button>
       </div>
     </div>

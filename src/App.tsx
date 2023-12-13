@@ -1,8 +1,7 @@
-import './App.css';
 import Container from './components/Container.tsx';
 
-function App() {
-  return <Container></Container>;
-}
+const App = () => {
+  return <Container />;
+};
 
 export default App;
