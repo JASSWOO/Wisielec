@@ -1,0 +1,7 @@
+.lettersDiv {
+  float: left;
+  letter-spacing: 15px;
+  color: white;
+  vertical-align: middle;
+  font-size: 40px;
+}
